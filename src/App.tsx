@@ -1,24 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+
+import { RickMortyTable } from './components/RickMortyTable';
+import { Character } from './interfaces/character.interface';
+
 
 function App() {
+  const [rickAndMortyData, setRickAndMortyData] = useState<{results: Character[]}>({results: []});
+  
+  //Pull this out to a custom hook
+  useEffect(() => {
+    fetch("https://rickandmortyapi.com/api/character/?page=2").then((res) => {
+      return res.json();
+    }).then(data => {
+      setRickAndMortyData(data);
+    });
+  }, []);
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h1>Route Smart Technical Assessment</h1>
       </header>
+      <RickMortyTable characters={rickAndMortyData.results}/>
     </div>
   );
 }
